@@ -24,6 +24,41 @@ the smallest installable unit.
 Every skill respects the conventions of the project it runs in. None of them requires another skill
 from this repository, and none of them depends on files outside its own folder.
 
+## Install with npx
+
+```bash
+# see all seven skills
+npx skills add jadezhouu/jade-agent-skills-public --list
+
+# one skill
+npx skills add jadezhouu/jade-agent-skills-public --skill jade-swiftdata -a codex -y
+
+# several skills
+npx skills add jadezhouu/jade-agent-skills-public --skill jade-swiftdata \
+  --skill jade-maintain-dev-docs -a codex -y
+
+# all seven
+npx skills add jadezhouu/jade-agent-skills-public --skill '*' -a codex -y
+```
+
+This uses the third-party [`skills`](https://www.npmjs.com/package/skills) CLI (verified with
+version 1.7.2) and requires **Node.js >= 22.20.0**. It copies the selected skills into
+`.agents/skills/` (project) or the directory your client expects, records the source and a content
+hash in `skills-lock.json`, and needs no credentials for this public repository.
+
+- Project-level install is the default; add `-g` for user-level.
+- `-y` is required when no terminal prompt is available. `--copy` forces copying.
+- Interactive selection and the symlink option were not verified. The non-interactive,
+  copy-mode install was: file paths, file contents, and the `0755` modes of bundled scripts match
+  this repository byte for byte, with no symlinks created.
+
+Update and restore:
+
+```bash
+npx skills update jade-swiftdata -y -p     # re-fetch from the recorded source
+npx skills experimental_install            # restore recorded content from skills-lock.json
+```
+
 ## Install a single skill
 
 1. Get the repository contents (clone, or download a release archive and unpack it).
@@ -57,34 +92,45 @@ cp -R plugins/jade-project ~/my-plugins/jade-project
 Client-specific plugin installation, enablement, and cache locations change between versions; use
 the client's current documentation. This repository does not ship a marketplace index.
 
-## Releases and checksums
+## Versions and pinning
 
-Each package has its own version tag (`jade-react-v0.1.x`, `jade-apple-v0.1.x`,
-`jade-project-v0.1.x`) and release archive containing `plugin.json`, `skills/`, `LICENSE`, and
-`PACKAGE-MANIFEST.json`, plus a `.sha256` file and a combined `SHA256SUMS`.
+Each package is versioned independently (`jade-react-v0.1.x`, `jade-apple-v0.1.x`,
+`jade-project-v0.1.x`). Installs from this repository follow the default branch; pin a version by
+installing from its tag path once that version is tagged:
+
+```bash
+npx skills add https://github.com/jadezhouu/jade-agent-skills-public/tree/jade-apple-v0.1.1/plugins/jade-apple/skills/jade-swiftdata -a codex -y
+```
+
+`tree/<commit-sha>` does **not** work: the installer treats that path segment as a branch name, and
+the clone fails. Use a tag or a branch.
+
+When a version is released, its release archive contains `plugin.json`, `skills/`, `LICENSE`, and
+`PACKAGE-MANIFEST.json`, together with a `.sha256` file and a combined `SHA256SUMS`:
 
 ```bash
 shasum -a 256 -c jade-apple-0.1.1.zip.sha256
 unzip jade-apple-0.1.1.zip -d jade-apple
 ```
 
-`PACKAGE-MANIFEST.json` lists every file in the archive with its SHA-256 and file mode, so you can
-verify the unpacked content file by file. The `git_commit` field in that manifest records the
-commit the archive was built from in the upstream development repository; it is informational and
-is not needed to install or verify a package.
-
-A tag fixes the repository snapshot for that release. Install a specific version by tag when you
-need a pinned copy:
-
-```bash
-git clone --branch jade-apple-v0.1.1 https://github.com/jadezhouu/jade-agent-skills-public.git
-```
+`PACKAGE-MANIFEST.json` lists every file with its SHA-256 and mode, so the unpacked content can be
+verified file by file. Its `git_commit` field records the build commit in the upstream development
+repository; it is informational and not needed to install or verify a package. Without a release
+archive, `skills-lock.json` plus `npx skills experimental_install` restores the exact installed
+content.
 
 ## Compatibility
 
+| Install path | Status |
+| --- | --- |
+| `npx skills add` (1.7.2) | Verified: lists all seven skills, single/multi/all project installs, update, lock restore |
+| Manual copy from a clone | Verified |
+| Package directory as a plugin | Verified with Codex CLI against a local marketplace; this repository does not ship a marketplace index |
+| Release ZIP | Not yet available |
+
 | Client | Status |
 | --- | --- |
-| Codex CLI 0.154.0 | Verified: package install, skill discovery, and task execution |
+| Codex CLI 0.154.0 | Verified: install, skill discovery, and task execution |
 | DeepSeek Harness (`dsh headless`) | Verified: project-level `.agents/skills/` discovery and task execution |
 | Claude Code | Not yet verified |
 | Other clients | Not yet verified |

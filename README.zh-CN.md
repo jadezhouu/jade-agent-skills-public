@@ -22,6 +22,39 @@
 每个 skill 都尊重它所在项目已有的约定。它们不需要本仓库中的其他 skill，也不依赖自身目录之外的
 文件。
 
+## 用 npx 安装
+
+```bash
+# 查看全部七个 skill
+npx skills add jadezhouu/jade-agent-skills-public --list
+
+# 安装单个
+npx skills add jadezhouu/jade-agent-skills-public --skill jade-swiftdata -a codex -y
+
+# 安装多个
+npx skills add jadezhouu/jade-agent-skills-public --skill jade-swiftdata \
+  --skill jade-maintain-dev-docs -a codex -y
+
+# 安装全部七个
+npx skills add jadezhouu/jade-agent-skills-public --skill '*' -a codex -y
+```
+
+使用第三方 [`skills`](https://www.npmjs.com/package/skills) 命令行工具（实测版本 1.7.2），要求
+**Node.js >= 22.20.0**。它会把选中的 skill 复制到 `.agents/skills/`（项目级）或客户端要求的目录，
+在 `skills-lock.json` 里记录来源与内容哈希；访问本公开仓库不需要任何凭据。
+
+- 默认项目级安装，加 `-g` 才是用户级。
+- 没有终端交互时必须带 `-y`；`--copy` 强制复制。
+- 交互式选择与 symlink 方式**未验证**；已验证的是非交互、复制模式：安装后的文件路径、内容与
+  随包脚本的 `0755` 权限与本仓库逐字节一致，且不创建符号链接。
+
+更新与恢复：
+
+```bash
+npx skills update jade-swiftdata -y -p     # 按记录来源重新拉取
+npx skills experimental_install            # 按 skills-lock.json 恢复记录的内容
+```
+
 ## 安装单个 skill
 
 1. 取得仓库内容（克隆仓库，或下载 Release 压缩包并解压）。
@@ -54,31 +87,41 @@ cp -R plugins/jade-project ~/my-plugins/jade-project
 客户端的插件安装、启用与缓存位置会随版本变化，以该客户端当前文档为准。本仓库不提供
 marketplace 索引。
 
-## Release 与校验和
+## 版本与固定
 
-每个能力包有自己的版本标签（`jade-react-v0.1.x`、`jade-apple-v0.1.x`、`jade-project-v0.1.x`）
-和发布压缩包，包内含 `plugin.json`、`skills/`、`LICENSE` 与 `PACKAGE-MANIFEST.json`，并附带
-`.sha256` 文件与合并的 `SHA256SUMS`。
+每个能力包独立版本（`jade-react-v0.1.x`、`jade-apple-v0.1.x`、`jade-project-v0.1.x`）。从本仓库
+安装默认跟随主分支；该版本打上标签后，可以用标签路径固定：
+
+```bash
+npx skills add https://github.com/jadezhouu/jade-agent-skills-public/tree/jade-apple-v0.1.1/plugins/jade-apple/skills/jade-swiftdata -a codex -y
+```
+
+`tree/<提交号>` **不可用**：安装器会把这一段当成分支名，克隆会失败。请使用标签或分支。
+
+版本发布时，对应压缩包内含 `plugin.json`、`skills/`、`LICENSE` 与 `PACKAGE-MANIFEST.json`，并附带
+`.sha256` 文件与合并的 `SHA256SUMS`：
 
 ```bash
 shasum -a 256 -c jade-apple-0.1.1.zip.sha256
 unzip jade-apple-0.1.1.zip -d jade-apple
 ```
 
-`PACKAGE-MANIFEST.json` 列出压缩包内每个文件的 SHA-256 与权限位，可以逐个文件核对解压结果。
-清单里的 `git_commit` 记录该压缩包在上游开发仓库中的构建提交，仅作追溯信息，安装和校验都用不到它。
-
-标签固定该版本的仓库快照。需要固定版本时按标签安装：
-
-```bash
-git clone --branch jade-apple-v0.1.1 https://github.com/jadezhouu/jade-agent-skills-public.git
-```
+`PACKAGE-MANIFEST.json` 列出每个文件的 SHA-256 与权限位，可以逐个文件核对解压结果；其中的
+`git_commit` 记录上游开发仓库的构建提交，仅作追溯，安装与校验都用不到它。没有发布压缩包时，用
+`skills-lock.json` 配合 `npx skills experimental_install` 恢复已安装的确切内容。
 
 ## 兼容性
 
+| 安装方式 | 状态 |
+| --- | --- |
+| `npx skills add`（1.7.2） | 已验证：列出全部七个 skill、单个/多选/全部的项目级安装、更新、按锁定文件恢复 |
+| 从克隆手动复制 | 已验证 |
+| 把包目录当插件安装 | 已在 Codex CLI 上用本地 marketplace 验证；本仓库不提供 marketplace 索引 |
+| 发布压缩包 | 尚未提供 |
+
 | 客户端 | 状态 |
 | --- | --- |
-| Codex CLI 0.154.0 | 已验证：按包安装、skill 发现与任务执行 |
+| Codex CLI 0.154.0 | 已验证：安装、skill 发现与任务执行 |
 | DeepSeek Harness（`dsh headless`） | 已验证：项目级 `.agents/skills/` 发现与任务执行 |
 | Claude Code | 未验证 |
 | 其他客户端 | 未验证 |
