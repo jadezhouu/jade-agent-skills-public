@@ -1,3 +1,5 @@
+English · [简体中文](README.zh-CN.md)
+
 # Jade Agent Skills
 
 Portable skills for AI coding agents: React performance work, Apple platform development, and
