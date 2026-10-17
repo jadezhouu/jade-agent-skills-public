@@ -89,8 +89,12 @@ marketplace 索引。
 
 ## 版本与固定
 
-每个能力包独立版本（`jade-react-v0.1.x`、`jade-apple-v0.1.x`、`jade-project-v0.1.x`）。从本仓库
-安装默认跟随主分支；该版本打上标签后，可以用标签路径固定：
+每个能力包独立版本，各自打标签发布。当前已发布
+[jade-apple 0.1.1](https://github.com/jadezhouu/jade-agent-skills-public/releases/tag/jade-apple-v0.1.1)、
+[jade-react 0.1.1](https://github.com/jadezhouu/jade-agent-skills-public/releases/tag/jade-react-v0.1.1)、
+[jade-project 0.1.1](https://github.com/jadezhouu/jade-agent-skills-public/releases/tag/jade-project-v0.1.1)。
+
+从本仓库安装默认跟随主分支；用标签路径可以固定版本：
 
 ```bash
 npx skills add https://github.com/jadezhouu/jade-agent-skills-public/tree/jade-apple-v0.1.1/plugins/jade-apple/skills/jade-swiftdata -a codex -y
@@ -98,7 +102,7 @@ npx skills add https://github.com/jadezhouu/jade-agent-skills-public/tree/jade-a
 
 `tree/<提交号>` **不可用**：安装器会把这一段当成分支名，克隆会失败。请使用标签或分支。
 
-版本发布时，对应压缩包内含 `plugin.json`、`skills/`、`LICENSE` 与 `PACKAGE-MANIFEST.json`，并附带
+每个版本的发布压缩包内含 `plugin.json`、`skills/`、`LICENSE` 与 `PACKAGE-MANIFEST.json`，并附带
 `.sha256` 文件与合并的 `SHA256SUMS`：
 
 ```bash
@@ -107,8 +111,9 @@ unzip jade-apple-0.1.1.zip -d jade-apple
 ```
 
 `PACKAGE-MANIFEST.json` 列出每个文件的 SHA-256 与权限位，可以逐个文件核对解压结果；其中的
-`git_commit` 记录上游开发仓库的构建提交，仅作追溯，安装与校验都用不到它。没有发布压缩包时，用
-`skills-lock.json` 配合 `npx skills experimental_install` 恢复已安装的确切内容。
+`git_commit` 记录上游开发仓库的构建提交，仅作追溯，安装与校验都用不到它。已发布的压缩包都经过匿名下载、校验和验证与
+实际安装。`skills-lock.json` 配合 `npx skills experimental_install` 可以在不下载压缩包的情况下恢复
+已安装的确切内容。
 
 ## 兼容性
 
@@ -117,7 +122,7 @@ unzip jade-apple-0.1.1.zip -d jade-apple
 | `npx skills add`（1.7.2） | 已验证：列出全部七个 skill、单个/多选/全部的项目级安装、更新、按锁定文件恢复 |
 | 从克隆手动复制 | 已验证 |
 | 把包目录当插件安装 | 已在 Codex CLI 上用本地 marketplace 验证；本仓库不提供 marketplace 索引 |
-| 发布压缩包 | 尚未提供 |
+| 发布压缩包 | 已验证：匿名下载、校验和验证、从发布地址安装 |
 
 | 客户端 | 状态 |
 | --- | --- |

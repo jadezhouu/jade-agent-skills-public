@@ -94,9 +94,12 @@ the client's current documentation. This repository does not ship a marketplace 
 
 ## Versions and pinning
 
-Each package is versioned independently (`jade-react-v0.1.x`, `jade-apple-v0.1.x`,
-`jade-project-v0.1.x`). Installs from this repository follow the default branch; pin a version by
-installing from its tag path once that version is tagged:
+Each package is versioned independently and released under its own tag. Out now:
+[jade-apple 0.1.1](https://github.com/jadezhouu/jade-agent-skills-public/releases/tag/jade-apple-v0.1.1),
+[jade-react 0.1.1](https://github.com/jadezhouu/jade-agent-skills-public/releases/tag/jade-react-v0.1.1),
+[jade-project 0.1.1](https://github.com/jadezhouu/jade-agent-skills-public/releases/tag/jade-project-v0.1.1).
+
+Installs follow the default branch; pin a version by installing from its tag path:
 
 ```bash
 npx skills add https://github.com/jadezhouu/jade-agent-skills-public/tree/jade-apple-v0.1.1/plugins/jade-apple/skills/jade-swiftdata -a codex -y
@@ -105,8 +108,8 @@ npx skills add https://github.com/jadezhouu/jade-agent-skills-public/tree/jade-a
 `tree/<commit-sha>` does **not** work: the installer treats that path segment as a branch name, and
 the clone fails. Use a tag or a branch.
 
-When a version is released, its release archive contains `plugin.json`, `skills/`, `LICENSE`, and
-`PACKAGE-MANIFEST.json`, together with a `.sha256` file and a combined `SHA256SUMS`:
+Each release archive contains `plugin.json`, `skills/`, `LICENSE`, and `PACKAGE-MANIFEST.json`,
+together with a `.sha256` file and a combined `SHA256SUMS`:
 
 ```bash
 shasum -a 256 -c jade-apple-0.1.1.zip.sha256
@@ -115,9 +118,9 @@ unzip jade-apple-0.1.1.zip -d jade-apple
 
 `PACKAGE-MANIFEST.json` lists every file with its SHA-256 and mode, so the unpacked content can be
 verified file by file. Its `git_commit` field records the build commit in the upstream development
-repository; it is informational and not needed to install or verify a package. Without a release
-archive, `skills-lock.json` plus `npx skills experimental_install` restores the exact installed
-content.
+repository; it is informational and not needed to install or verify a package. Every published archive has been downloaded,
+checksum-verified, and installed from its release URL. `skills-lock.json` plus
+`npx skills experimental_install` restores the exact installed content without downloading a release.
 
 ## Compatibility
 
@@ -126,7 +129,7 @@ content.
 | `npx skills add` (1.7.2) | Verified: lists all seven skills, single/multi/all project installs, update, lock restore |
 | Manual copy from a clone | Verified |
 | Package directory as a plugin | Verified with Codex CLI against a local marketplace; this repository does not ship a marketplace index |
-| Release ZIP | Not yet available |
+| Release ZIP | Verified: download, checksum verification, and install from the published archive |
 
 | Client | Status |
 | --- | --- |
