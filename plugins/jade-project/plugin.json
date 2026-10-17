@@ -1,0 +1,28 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "jade-project",
+  "version": "0.1.1",
+  "description": "Cross-stack project workflows for directory planning, documentation organization, and maintainable repository structure.",
+  "author": {
+    "name": "Jade Zhou",
+    "url": "https://github.com/jadezhouu"
+  },
+  "homepage": "https://github.com/jadezhouu/jade-agent-skills-public",
+  "repository": "https://github.com/jadezhouu/jade-agent-skills-public",
+  "license": "MIT",
+  "keywords": [
+    "project-structure",
+    "documentation",
+    "architecture"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Jade Project",
+        "shortDescription": "Project structure and documentation workflows",
+        "developerName": "Jade Zhou",
+        "category": "Productivity"
+      }
+    }
+  }
+}

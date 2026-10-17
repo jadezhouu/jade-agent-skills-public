@@ -1,0 +1,30 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "jade-apple",
+  "version": "0.1.1",
+  "description": "Apple platform workflows for macOS, iOS, and watchOS development, including Swift review and cross-platform feature work.",
+  "author": {
+    "name": "Jade Zhou",
+    "url": "https://github.com/jadezhouu"
+  },
+  "homepage": "https://github.com/jadezhouu/jade-agent-skills-public",
+  "repository": "https://github.com/jadezhouu/jade-agent-skills-public",
+  "license": "MIT",
+  "keywords": [
+    "apple",
+    "macos",
+    "ios",
+    "watchos",
+    "swift"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Jade Apple",
+        "shortDescription": "macOS, iOS, and watchOS development workflows",
+        "developerName": "Jade Zhou",
+        "category": "Productivity"
+      }
+    }
+  }
+}
