@@ -24,7 +24,7 @@ the smallest installable unit.
 Every skill respects the conventions of the project it runs in. None of them requires another skill
 from this repository, and none of them depends on files outside its own folder.
 
-## Install with npx
+## Install with npx (recommended)
 
 ```bash
 # see all seven skills
@@ -59,27 +59,32 @@ npx skills update jade-swiftdata -y -p     # re-fetch from the recorded source
 npx skills experimental_install            # restore recorded content from skills-lock.json
 ```
 
-## Install a single skill
+No Node.js, or does your client expect a plugin directory? Use
+[manual install](#install-without-the-cli) instead.
 
-1. Get the repository contents (clone, or download a release archive and unpack it).
-2. Copy the **whole skill folder** — not just `SKILL.md` — into one of these locations:
+## Install without the CLI
 
-   | Scope | Location |
-   | --- | --- |
-   | Project | `<your project>/.agents/skills/<skill>/` |
-   | User | `~/.agents/skills/<skill>/` |
+Use this path when Node.js is unavailable, the network is restricted, or a client wants a plugin
+directory instead of loose skill folders.
 
-   For example, from a clone of this repository:
+### Copy a skill folder
 
-   ```bash
-   mkdir -p ~/.agents/skills
-   cp -R plugins/jade-apple/skills/jade-swiftdata ~/.agents/skills/
-   ```
+Clone the repository or unpack a release archive, then copy the **whole skill folder** — not just
+`SKILL.md` — to one of these locations:
 
-3. Confirm the copied folder contains `SKILL.md` plus any `references/`, `assets/`, and `scripts/`
-   that ship with it. Copying `SKILL.md` alone breaks the reference links and scripts.
+| Scope | Location |
+| --- | --- |
+| Project | `<your project>/.agents/skills/<skill>/` |
+| User | `~/.agents/skills/<skill>/` |
 
-## Install a whole package
+```bash
+mkdir -p ~/.agents/skills
+cp -R plugins/jade-apple/skills/jade-swiftdata ~/.agents/skills/
+```
+
+Copying `SKILL.md` alone breaks the reference links and scripts.
+
+### Install a package as a plugin
 
 A package is a portable plugin: `plugins/<package>/plugin.json` plus `plugins/<package>/skills/`.
 Install the package directory, not one of its skill directories, when using a client that manages
@@ -91,61 +96,6 @@ cp -R plugins/jade-project ~/my-plugins/jade-project
 
 Client-specific plugin installation, enablement, and cache locations change between versions; use
 the client's current documentation. This repository does not ship a marketplace index.
-
-## Versions and pinning
-
-Each package is versioned independently and released under its own tag. Out now:
-[jade-apple 0.1.1](https://github.com/jadezhouu/jade-agent-skills-public/releases/tag/jade-apple-v0.1.1),
-[jade-react 0.1.1](https://github.com/jadezhouu/jade-agent-skills-public/releases/tag/jade-react-v0.1.1),
-[jade-project 0.1.1](https://github.com/jadezhouu/jade-agent-skills-public/releases/tag/jade-project-v0.1.1).
-
-Installs follow the default branch; pin a version by installing from its tag path:
-
-```bash
-npx skills add https://github.com/jadezhouu/jade-agent-skills-public/tree/jade-apple-v0.1.1/plugins/jade-apple/skills/jade-swiftdata -a codex -y
-```
-
-`tree/<commit-sha>` does **not** work: the installer treats that path segment as a branch name, and
-the clone fails. Use a tag or a branch.
-
-Each release archive contains `plugin.json`, `skills/`, `LICENSE`, and `PACKAGE-MANIFEST.json`,
-together with a `.sha256` file and a combined `SHA256SUMS`:
-
-```bash
-shasum -a 256 -c jade-apple-0.1.1.zip.sha256
-unzip jade-apple-0.1.1.zip -d jade-apple
-```
-
-`PACKAGE-MANIFEST.json` lists every file with its SHA-256 and mode, so the unpacked content can be
-verified file by file. Its `git_commit` field records the build commit in the upstream development
-repository; it is informational and not needed to install or verify a package. Every published archive has been downloaded,
-checksum-verified, and installed from its release URL. `skills-lock.json` plus
-`npx skills experimental_install` restores the exact installed content without downloading a release.
-
-## Compatibility
-
-| Install path | Status |
-| --- | --- |
-| `npx skills add` (1.7.2) | Verified: lists all seven skills, single/multi/all project installs, update, lock restore |
-| Manual copy from a clone | Verified |
-| Package directory as a plugin | Verified with Codex CLI against a local marketplace; this repository does not ship a marketplace index |
-| Release ZIP | Verified: download, checksum verification, and install from the published archive |
-
-| Client | Status |
-| --- | --- |
-| Codex CLI 0.154.0 | Verified: install, skill discovery, and task execution |
-| DeepSeek Harness (`dsh headless`) | Verified: project-level `.agents/skills/` discovery and task execution |
-| Claude Code | Not yet verified |
-| Other clients | Not yet verified |
-
-Skills follow the `SKILL.md` convention: YAML frontmatter with `name` and `description`, Markdown
-instructions, and optional `references/`, `assets/`, and `scripts/` folders. Clients that read that
-convention can load them, but "same file format" is not the same as "behaves correctly in that
-client" — anything not listed above is untested.
-
-Platform notes: the Apple skills are validated for macOS, iOS, and watchOS workflows and assume a
-current Xcode toolchain when they mention building or asset compilation. Nothing here has been
-verified on a physical device or against every OS version.
 
 ## Feedback
 

@@ -22,7 +22,7 @@
 每个 skill 都尊重它所在项目已有的约定。它们不需要本仓库中的其他 skill，也不依赖自身目录之外的
 文件。
 
-## 用 npx 安装
+## 用 npx 安装（推荐）
 
 ```bash
 # 查看全部七个 skill
@@ -55,27 +55,30 @@ npx skills update jade-swiftdata -y -p     # 按记录来源重新拉取
 npx skills experimental_install            # 按 skills-lock.json 恢复记录的内容
 ```
 
-## 安装单个 skill
+没有 Node.js，或客户端要求插件目录？改用[手动安装](#手动安装)。
 
-1. 取得仓库内容（克隆仓库，或下载 Release 压缩包并解压）。
-2. 把**整个 skill 文件夹**（不只是 `SKILL.md`）复制到下列位置之一：
+## 手动安装
 
-   | 范围 | 位置 |
-   | --- | --- |
-   | 项目级 | `<你的项目>/.agents/skills/<skill>/` |
-   | 用户级 | `~/.agents/skills/<skill>/` |
+适用于没有 Node.js、网络受限，或客户端要求插件目录而非散装 skill 文件夹的情况。
 
-   例如，在克隆后的仓库根目录执行：
+### 复制 skill 文件夹
 
-   ```bash
-   mkdir -p ~/.agents/skills
-   cp -R plugins/jade-apple/skills/jade-swiftdata ~/.agents/skills/
-   ```
+克隆仓库或解压 Release 压缩包，然后把**整个 skill 文件夹**（不只是 `SKILL.md`）复制到下列位置
+之一：
 
-3. 确认复制后的目录里有 `SKILL.md`，以及随它提供的 `references/`、`assets/`、`scripts/`。只复制
-   `SKILL.md` 会让参考链接和脚本失效。
+| 范围 | 位置 |
+| --- | --- |
+| 项目级 | `<你的项目>/.agents/skills/<skill>/` |
+| 用户级 | `~/.agents/skills/<skill>/` |
 
-## 安装整个能力包
+```bash
+mkdir -p ~/.agents/skills
+cp -R plugins/jade-apple/skills/jade-swiftdata ~/.agents/skills/
+```
+
+只复制 `SKILL.md` 会让参考链接和脚本失效。
+
+### 作为客户端插件安装能力包
 
 能力包就是一个便携式插件：`plugins/<package>/plugin.json` 加上 `plugins/<package>/skills/`。
 使用带插件管理的客户端时，安装包目录本身，而不是包里的某个 skill 目录。
@@ -86,57 +89,6 @@ cp -R plugins/jade-project ~/my-plugins/jade-project
 
 客户端的插件安装、启用与缓存位置会随版本变化，以该客户端当前文档为准。本仓库不提供
 marketplace 索引。
-
-## 版本与固定
-
-每个能力包独立版本，各自打标签发布。当前已发布
-[jade-apple 0.1.1](https://github.com/jadezhouu/jade-agent-skills-public/releases/tag/jade-apple-v0.1.1)、
-[jade-react 0.1.1](https://github.com/jadezhouu/jade-agent-skills-public/releases/tag/jade-react-v0.1.1)、
-[jade-project 0.1.1](https://github.com/jadezhouu/jade-agent-skills-public/releases/tag/jade-project-v0.1.1)。
-
-从本仓库安装默认跟随主分支；用标签路径可以固定版本：
-
-```bash
-npx skills add https://github.com/jadezhouu/jade-agent-skills-public/tree/jade-apple-v0.1.1/plugins/jade-apple/skills/jade-swiftdata -a codex -y
-```
-
-`tree/<提交号>` **不可用**：安装器会把这一段当成分支名，克隆会失败。请使用标签或分支。
-
-每个版本的发布压缩包内含 `plugin.json`、`skills/`、`LICENSE` 与 `PACKAGE-MANIFEST.json`，并附带
-`.sha256` 文件与合并的 `SHA256SUMS`：
-
-```bash
-shasum -a 256 -c jade-apple-0.1.1.zip.sha256
-unzip jade-apple-0.1.1.zip -d jade-apple
-```
-
-`PACKAGE-MANIFEST.json` 列出每个文件的 SHA-256 与权限位，可以逐个文件核对解压结果；其中的
-`git_commit` 记录上游开发仓库的构建提交，仅作追溯，安装与校验都用不到它。已发布的压缩包都经过匿名下载、校验和验证与
-实际安装。`skills-lock.json` 配合 `npx skills experimental_install` 可以在不下载压缩包的情况下恢复
-已安装的确切内容。
-
-## 兼容性
-
-| 安装方式 | 状态 |
-| --- | --- |
-| `npx skills add`（1.7.2） | 已验证：列出全部七个 skill、单个/多选/全部的项目级安装、更新、按锁定文件恢复 |
-| 从克隆手动复制 | 已验证 |
-| 把包目录当插件安装 | 已在 Codex CLI 上用本地 marketplace 验证；本仓库不提供 marketplace 索引 |
-| 发布压缩包 | 已验证：匿名下载、校验和验证、从发布地址安装 |
-
-| 客户端 | 状态 |
-| --- | --- |
-| Codex CLI 0.154.0 | 已验证：安装、skill 发现与任务执行 |
-| DeepSeek Harness（`dsh headless`） | 已验证：项目级 `.agents/skills/` 发现与任务执行 |
-| Claude Code | 未验证 |
-| 其他客户端 | 未验证 |
-
-这些 skill 遵循 `SKILL.md` 约定：YAML frontmatter 提供 `name` 与 `description`，正文为 Markdown
-指令，可选 `references/`、`assets/`、`scripts/` 目录。读取该约定的客户端可以加载它们，但"文件格式
-相同"不等于"在该客户端里行为正确"——上表未列出的客户端均未测试。
-
-平台说明：Apple 相关 skill 针对 macOS、iOS、watchOS 工作流验证，涉及构建或资源编译时会假定有可用的
-Xcode 工具链。本仓库未在真机上验证，也未覆盖每个系统版本。
 
 ## 反馈
 
