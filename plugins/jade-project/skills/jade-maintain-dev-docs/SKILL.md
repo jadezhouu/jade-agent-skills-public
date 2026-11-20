@@ -1,6 +1,6 @@
 ---
 name: jade-maintain-dev-docs
-description: Govern development documentation by creating, continuing, reviewing, or closing change records; synchronizing architecture and current specifications with code changes; and maintaining decisions, handoffs, and historical migrations. Use for documentation governance, architecture documentation updates, change handoffs, and documentation acceptance checks; not for ordinary copyediting or generating a full documentation set for every code change.
+description: "Govern a project's development documentation system: decide which document owns a given rule and which copy is authoritative, keep that rule synchronized across documents, verify whether authoritative current specifications and architecture documents still describe the implemented state, maintain indexes and reference integrity, create, continue, hand off, and close change records, maintain decisions and historical migrations, and update architecture or current specifications when the task is to reflect a code change in them. Do not use to review how well a single requirements, design, or specification document is written — whether it is self-consistent, implementable, testable, or well worded — or for ordinary copyediting. Consulting source code or other documents to verify facts is not a trigger by itself."
 ---
 
 # Maintain Development Documentation
@@ -10,7 +10,9 @@ Keep current rules discoverable, history traceable, and handoffs actionable. Thi
 ## 1. Identify Rules and Task Boundaries
 
 - Read the applicable AGENTS.md, documentation guide, and existing indexes in the target project, if present, as entry points to project rules. Do not assume particular filenames, directories, identifiers, or checkers exist.
-- Determine whether the task is review, editing, closure, or migration. For review-only tasks, report findings without editing documents. Code changes inform documentation impact; they do not authorize code edits or broader refactoring.
+- Determine whether the task is documentation-system review, editing, closure, or migration. A documentation-system review addresses ownership, responsibilities, authoritative sources, cross-document synchronization, index and reference integrity, consistency between current specifications and the implementation, and change-record handoff and closure conditions; for review-only work, report findings without editing documents.
+- Reviewing a single document's own content (self-consistency, feasibility, testability, wording) is ordinary review, not this workflow. Consulting source code, tests, or implementation records to verify facts does not change the task's nature; the test is whether the conclusion requires acting on the documentation system, not whether code was read.
+- Code changes inform documentation impact; they do not authorize code edits or broader refactoring.
 - Search related changes, current specifications, decisions, and architecture documents. Continue the existing record for the same concern before creating another. Without conventions, use one lightweight record for this task; design a directory structure and governance rules only when the user requests a governance system.
 - Establish the relevant change range and verify it against working tree changes, specified commits, or user-provided materials. If the range is missing, inspect available material first; disclose gaps that affect conclusions and ask when necessary. Do not claim complete verification.
 
