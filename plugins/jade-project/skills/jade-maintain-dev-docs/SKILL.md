@@ -25,6 +25,7 @@ Keep current rules discoverable, history traceable, and handoffs actionable. Thi
 | Module responsibility, dependency direction, data contract, concurrency boundary, lifecycle, or cross-domain strategy change | Verify and update affected architecture contracts; change overviews and summaries only when topology, global invariants, or navigation changes |
 | Added, moved, or deleted document or module entry point | Update affected indexes and references |
 | Changed long-term tradeoff, alternative, or decision rationale | Record or extend a decision record according to project conventions |
+| This change invalidates the value, condition, or scope of an existing decision record | Update that record in the same task, or mark it as superseded and link the replacement. Changing only the code leaves a rationale that still reads as valid but no longer holds |
 
 Investigate uncertain boundaries rather than automatically expanding to a full documentation rewrite. Derive the needed document updates from the change; do not require every task to produce specifications, plans, decisions, and release notes.
 
@@ -32,7 +33,7 @@ Investigate uncertain boundaries rather than automatically expanding to a full d
 
 - Current specifications describe verified current behavior; change records hold goals, plans, progress, verification, and unresolved issues; decision records hold choices, rationale, consequences, and actual decision sources. Maintain release notes only when the task involves a release.
 - When editing architecture documentation, read the architecture section of [Architecture and Migration Guide](references/architecture-and-migration.md); when migrating material, read its migration section.
-- Every new or changed implementation contract must point to current evidence, such as a symbol and file path, or a file and line number. Tests and configuration can support corresponding claims. Old documentation is not proof that the current implementation has been verified.
+- Every new or changed implementation contract must point to current evidence, such as a symbol and file path, or a file and line number. Tests and configuration can support corresponding claims. Old documentation is not proof that the current implementation has been verified. If the project already specifies an evidence format, such as commits, log anchors, or a designated checker, follow the project's format; a file and line number may not pass that checker.
 - Requirements can describe intended behavior, but must identify what is unimplemented or unverified rather than mixing it into verified current facts. If implementation conflicts with specifications, report the discrepancy and establish whether the specification remains the intended requirement; do not legitimize a defect by changing documentation.
 - Edit only affected content. Keep chat transcripts, phase progress, and task lists out of architecture contracts. Indexes contain navigation and necessary summaries; status belongs to the authoritative record designated by the project.
 
